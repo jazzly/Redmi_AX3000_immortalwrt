@@ -38,8 +38,10 @@ jobs:
 
       - name: Update and install feeds
         run: |
+          sed -i '$a src-git helloworld https://github.com/fw876/helloworld.git'  feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
+          sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
 
       - name: Configure
         run: |
@@ -47,15 +49,11 @@ jobs:
             CONFIG_TARGET_qualcommax=y
             CONFIG_TARGET_qualcommax_ipq50xx=y
 
-            CONFIG_IB=y
-            # CONFIG_IB_STANDALONE is not set
-            CONFIG_SDK=y
-            CONFIG_MAKE_TOOLCHAIN=y
-
-            CONFIG_ALL_NONSHARED=y
-            CONFIG_REPRODUCIBLE_DEBUG_INFO=y
-
-            CONFIG_PACKAGE_luci=y
+            CONFIG_PACKAGE_luci-app-wol=y
+            CONFIG_PACKAGE_luci-app-ssr-plus=y
+            CONFIG_PACKAGE_luci-proto-wireguard=y
+            CONFIG_PACKAGE_luci-theme-argon=y
+            CONFIG_PACKAGE_6in4=y
           EOF
           make defconfig
 
